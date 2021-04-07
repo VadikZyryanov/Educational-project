@@ -1,5 +1,9 @@
 'use strict';
 
+let isNumber = (n) => {
+    return !isNaN(parseFloat(n)) && isFinite(n)
+}
+
 let money = 100000;
 let income = 'Вклад в банке';
 let addExpenses = 'Еда, Зал, Интернет, Заправка';
@@ -7,22 +11,40 @@ let deposit = true;
 let mission = 123456789;
 let period = 8;
 
-money = +prompt('Ваш месячный доход?', '45000');
 addExpenses = prompt('Перечислите возможные расходы за рассчитываемый период через запятую', 'Интернет, Бензин, Клубы');
 deposit = confirm('Есть ли у вас депозит в банке?');
-let expenses1 = prompt('Введите обязательную статью расходов?', 'Кварплата');
-let amount1 = +prompt('Во сколько это обойдется?', '5000');
-let expenses2 = prompt('Введите обязательную статью расходов?', 'Питание');
-let amount2 = +prompt('Во сколько это обойдется?', '10000');
+let expenses = [];
 
-function getExprensesMonth(a, b){
-    return a + b;
+let start = () => {
+    // money = prompt('Ваш месячный доход?');
+    // while (!isNumber(money)) {
+    //     money = prompt('Ваш месячный доход?', '45000');
+    // }
+    do {
+        money = prompt('Ваш месячный доход?');
+    } while (!isNumber(money));
+}
+start();
+
+function getExprensesMonth(){
+    let sum = 0;
+    let amount;
+    for (let i = 0; i < 2; i++) {
+        expenses[i] = prompt('Введите обязательную статью расходов?');
+        do {
+            amount = prompt('Во сколько это обойдется?');
+        } while (!isNumber(amount));
+        sum += parseFloat(amount);
+    }
+    return sum;
 };
+let expensesAmount = getExprensesMonth();
+
 
 function getAccumulatedMonth(a, b){
     return a - b;
 };
-let accumulatedMonth = getAccumulatedMonth(money, getExprensesMonth(amount1, amount2));
+let accumulatedMonth = getAccumulatedMonth(money, expensesAmount);
 
 function getTargetMonth(a, b){
     return Math.ceil(a / b);
@@ -37,9 +59,11 @@ showTypeOf(money);
 showTypeOf(income);
 showTypeOf(deposit);
 
-console.log(getExprensesMonth(amount1, amount2));
+console.log(expensesAmount);
 console.log(addExpenses.split(', '));
-console.log('Цель будет достигнута за ' + missionCompleted + ' месяцев(-а)');
+missionCompleted > 0 
+    ? console.log('Цель будет достигнута за ' + missionCompleted + ' месяцев(-а)')
+    : console.log('Цель не будет достигнута');
 console.log('Бюджет на день: ' + budgetDay + ' рублей');
 
 function getStatusIncome(){
