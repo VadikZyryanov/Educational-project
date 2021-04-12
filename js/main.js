@@ -1,5 +1,26 @@
 'use strict';
 
+const startButton = document.getElementById('start');
+const incomeAdd = document.querySelector('.income_add');
+const expensesAdd = document.querySelector('.expenses_add');
+const depositCheck = document.querySelector('#deposit-check')
+const additionalIncomeItem = document.querySelectorAll('.additional_income-item')
+const budgetDayValue = document.getElementsByClassName('budget_day-value')[0];
+const expensesMonthValue = document.getElementsByClassName('expenses_month-value')[0];
+const additionalIncomeValue = document.getElementsByClassName('additional_income-value')[0];
+const additionalExpensesValue = document.getElementsByClassName('additional_expenses-value')[0];
+const incomePeriodValue = document.getElementsByClassName('income_period-value')[0];
+const targetMonthValue = document.getElementsByClassName('target_month-value')[0];
+const budgetMonthValue = document.querySelector('.budget_month-value');
+const salaryTitle = document.querySelector('.salary-title');
+const incomeTitle = document.querySelector('.income-title');
+const incomeAmount = document.querySelector('.income-amount');
+const expensesTitle = document.querySelector('.expenses-title');
+const expensesAmount = document.querySelector('.expenses-amount');
+const additionalExpensesItem = document.querySelector('.additional_expenses-item');
+const targetAmount = document.querySelector('.target-amount');
+
+
 let money = 100000;
 
 let isNumber = (n) => {
