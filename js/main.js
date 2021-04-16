@@ -165,6 +165,7 @@ let appData = {
         typeTextListAll.forEach((item) => {
             item.value = '';
         });
+        
         this.budget = 0;
         this.budgetDay = 0;
         this.budgetMonth = 0;
