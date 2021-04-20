@@ -20,6 +20,9 @@ const additionalExpensesItem = document.querySelector('.additional_expenses-item
 const targetAmount = document.querySelector('.target-amount');
 const periodSelect = document.querySelector('.period-select');
 const periodAmount = document.querySelector('.period-amount');
+const depositBank = document.querySelector('.deposit-bank');
+const depositAmount = document.querySelector('.deposit-amount');
+const depositPercent = document.querySelector('.deposit-percent');
 let incomeItems = document.querySelectorAll('.income-items');
 let expensesItems = document.querySelectorAll('.expenses-items');
 
@@ -46,6 +49,7 @@ class AppData {
         this.getIncomeMonth();
         this.getAddExpenses();
         this.getAddIncome();
+        this.getInfoDeposit();
         this.getBudget();
         this.showResult();
     }
@@ -125,7 +129,8 @@ class AppData {
         }
     }
     getBudget() {
-        this.budgetMonth = this.budget + this.incomeMonth - this.expensesMonth;
+        const monthDeposit = this.moneyDeposit * (this.percentDeposit / 100);
+        this.budgetMonth = this.budget + this.incomeMonth - this.expensesMonth + monthDeposit;
         this.budgetDay = Math.floor(this.budgetMonth/30);
     }
     getTargetMonth() {
@@ -188,15 +193,63 @@ class AppData {
     isNumber(n) {
         return !isNaN(parseFloat(n)) && isFinite(n);
     }
+
+    getInfoDeposit() {
+        if(this.deposit) {
+            this.percentDeposit = depositPercent.value;
+            this.moneyDeposit = depositAmount.value;
+        }
+    }
+
+    changePercent() {
+        const valueSelect = this.value;
+        if(valueSelect === 'other') {
+            depositPercent.style.display = 'inline-block';
+            depositPercent.value = '';
+            depositPercent.addEventListener('change', () => {
+                this.percentDeposit = depositPercent.value;
+                if(isNaN(parseFloat(this.percentDeposit)) || !isFinite(this.percentDeposit) || this.percentDeposit < 0 || this.percentDeposit > 100 ){
+                    alert('Введите корректное значение в поле проценты');
+                    depositPercent.value = '';
+                    startButton.style.display = 'none';
+                } else {
+                    startButton.style.display = 'inline-block';
+                }
+            })
+        } else {
+            depositPercent.style.display = 'none';
+            depositPercent.value = valueSelect;
+        }
+    }
+
+    depositHandler() {
+        if(depositCheck.checked) {
+            depositBank.style.display = 'inline-block';
+            depositAmount.style.display = 'inline-block';
+            this.deposit = 'true';
+            depositBank.addEventListener('change', this.changePercent);
+        } else {
+            depositBank.style.display = 'none';
+            depositAmount.style.display = 'none';
+            depositBank.value = '';
+            depositAmount.value = '';
+            depositPercent.value = '';
+            this.deposit = 'false';
+            depositBank.removeEventListener('change', this.changePercent);
+        }
+    }
+
+    eventsListenersStart() {
+        if (salaryAmount.value !== ''){
+            this.start();
+            this.disabledData();
+            startButton.style.display = 'none';
+            resetButton.style.display = 'inline-block';
+        }
+    }
+
     eventsListeners() {
-        startButton.addEventListener('click', () => {
-            if (salaryAmount.value !== ''){
-                this.start();
-                this.disabledData();
-                startButton.style.display = 'none';
-                resetButton.style.display = 'inline-block';
-            }
-        });
+        startButton.addEventListener('click', this.eventsListenersStart.bind(this));
 
         resetButton.addEventListener('click', () => {
             this.reset();
@@ -213,6 +266,8 @@ class AppData {
                 this.showResult();
             }
         });
+
+        depositCheck.addEventListener('change', this.depositHandler.bind(this));
     }
 }
 
